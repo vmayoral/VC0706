@@ -58,3 +58,5 @@ VC0706
 	1.0	22.9.2013	initial commit, fully functional except for the reset has minor issues
 	1.1	23.9.2013	Fixed reset, added more documentation, made sample setImageSize to reset at the end. Removed unused variables and defines. Some clean up. Changed some static variables to dynamically allocated. Added class destructor.
 
+	---
+	Protocol cheat sheet here: http://www.adafruit.com/datasheets/VC0706protocol.pdf
