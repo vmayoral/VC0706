@@ -35,9 +35,8 @@ VC0706
 	
 	Compiles without modifications for atleast: mac os x &
 	linux.
-======
 
-	-----
+======
 
 	Some ground rules not mentioned in documents:
 	1) Settings (imagesize, downsize and compression) always apply only after systemReset.
@@ -63,7 +62,7 @@ VC0706
 	   this happened once) itself, and you cannot communicate with it. In this case, cycle power 
 	   for a moment, and try again. It should come up after awhile. If not - few more times..
 
-	-----
+======
 
 	Version history
 	1.0	22.9.2013	initial commit, fully functional except for the reset has minor issues
@@ -72,7 +71,7 @@ VC0706
 				some static variables to dynamically allocated ones. Added a class
 				destructor.
 
-	-----
+======
 	
 	Protocol cheat sheet URL: http://www.adafruit.com/datasheets/VC0706protocol.pdf
 	
