@@ -36,27 +36,41 @@ VC0706
 	Compiles without modifications for atleast: mac os x &
 	linux.
 
-	---
+	-----
 
 	Some ground rules not mentioned in documents:
 	1) Settings (imagesize, downsize and compression) always apply only after systemReset.
-	2) systemReset is not necessary when starting communication with camera, when system resets, responseData contains:
+	
+	2) systemReset is not necessary when starting communication with camera, when system
+	   resets, responseData contains:
 		3 1.00
 		Ctrl infr exist
 		USER-defined sensor
 		525
 		Init end
 
-	  after systemReset() baudrate is always 38400.
-	3) if genVersion() reports strange characters, you should perform a systemReset(); check it once in a while - does not occur often, used baudrate does not affect, happens with both 38400 and 115200 - when the "thing" hits in the fan..
-	4) Guidance for using higher baudrates? Camera always starts communication with 38400 when reset of power cycled. Check samples in src directory - function is called initiateConnection();
-	5) Sometimes camera just looses (very rare, been toying with this thing for 2 days now and this happened once) itself, and you cannot communicate with it. In this case, cycle power for a moment, and try again. It should come up after awhile.
+	   after systemReset() baudrate is always 38400.
+	   
+	3) if genVersion() reports strange characters, you should perform a systemReset(); check it once in a 
+	   while - does not occur often, used baudrate does not affect, happens with both 38400 and 
+	   115200 - when the "thing" hits in the fan..
+	   
+	4) Guidance for using higher baudrates? Camera always starts communication with 38400 when reset of power cycled. 
+	   Check samples in src directory - function is called initiateConnection();
+	   
+	5) Sometimes camera just looses (very rare, been toying with this thing for 2 days now and this happened once) 
+	   itself, and you cannot communicate with it. In this case, cycle power for a moment, and try again. It should 
+	   come up after awhile.
 
-	---
+	-----
 
 	Version history
 	1.0	22.9.2013	initial commit, fully functional except for the reset has minor issues
-	1.1	23.9.2013	Fixed reset, added more documentation, made sample setImageSize to reset at the end. Removed unused variables and defines. Some clean up. Changed some static variables to dynamically allocated. Added class destructor.
+	1.1	23.9.2013	Fixed reset, added more documentation, made sample setImageSize to reset at the end. 
+	                        Removed unused variables and defines. Some clean up. Changed some static variables to 
+	                        dynamically allocated ones. Added a class destructor.
 
-	---
-	Protocol cheat sheet here: http://www.adafruit.com/datasheets/VC0706protocol.pdf
+	-----
+	
+	Protocol cheat sheet URL: http://www.adafruit.com/datasheets/VC0706protocol.pdf
+	
