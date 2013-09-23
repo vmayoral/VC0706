@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "wiringSerial.h"
 
 VC0706::VC0706(void) {
@@ -9,9 +10,11 @@ VC0706::VC0706(void) {
   this -> bufferLen = 0;
   this -> currentbaud = 0;  
   this -> serialNum = 0;
+  this -> devPath = NULL;
 }
   
 VC0706::VC0706(const char *devPath) {
+  this -> devPath = (char *)malloc(sizeof(char) * (strlen(devPath) + 1));
   strcpy(this -> devPath, devPath);
   this -> frameptr = 0;
   this -> bufferLen = 0;
@@ -20,6 +23,7 @@ VC0706::VC0706(const char *devPath) {
 }
 
 VC0706::VC0706(char *devPath) {
+  this -> devPath = (char *)malloc(sizeof(char) * (strlen(devPath) + 1));
   strcpy(this -> devPath, devPath);
   this -> frameptr = 0;
   this -> bufferLen = 0;
@@ -27,7 +31,16 @@ VC0706::VC0706(char *devPath) {
   this -> serialNum = 0;
 }
 
+VC0706::~VC0706() {
+  if ( this -> devPath != NULL )
+    free( this -> devPath );
+}
+
 void VC0706::setDevPath(char *newDevPath) {
+  if ( this -> devPath != NULL )
+    free( this -> devPath );
+  this -> devPath = NULL;
+  this -> devPath = (char *)malloc(sizeof(char) * (strlen(devPath) + 1));
   strcpy(this -> devPath, newDevPath);
 }
 
@@ -44,7 +57,7 @@ boolean VC0706::connect(void) {
 }
 
 boolean VC0706::connect(int baud) {
-    
+      
   if (( baud != 9600 ) && ( baud != 19200 ) && ( baud != 38400 ) &&
       ( baud != 57600) && ( baud != 115200 )) return false;
 
@@ -121,9 +134,8 @@ boolean VC0706::systemReset(void) {
   if ( !this -> runCommand(0x26, args, 0 ))
     return false;
 
-  serialFlush(this -> sc);
-  serialClose(this -> sc);
-    
+  serialClose(this -> sc);    
+  
   this -> frameptr = 0;
   this -> bufferLen = 0;
   this -> currentbaud = 0;  
@@ -131,8 +143,34 @@ boolean VC0706::systemReset(void) {
   
   if ( (this -> sc = serialOpen(this -> devPath, 38400)) != -1 )
     this -> currentbaud = 38400;
+  else return false;
+
+  usleep(1000);
   
-  return this -> sc == -1 ? false : true;
+  uint8_t counter = 0;
+  int avail, ch;
+  
+  while (( counter != 200 ) && ( this -> bufferLen != 80 + 5 )) {
+    if (( avail = serialDataAvail( this -> sc )) < 1 ) {
+      usleep(1000);
+      counter++;
+      continue;
+    }
+    
+    counter = 0;
+    ch = serialGetchar( this -> sc );    
+    this -> camerabuff[this -> bufferLen++] = ch;
+  }
+
+  // Just make to make sure camera's serial output really is flushed..
+  if (( avail = serialDataAvail( this -> sc )) > 0 )
+    while (( avail = serialDataAvail( this -> sc )) > 0 )
+      ch = serialGetchar( this -> sc );
+
+  this -> camerabuff[4] = this -> bufferLen - 5;
+    
+  return this -> bufferLen - 5 == 0 ? false : true;
+  
 }
 
 boolean VC0706::setSerialNo(uint8_t newSerialNo) {
@@ -456,3 +494,8 @@ void VC0706::printBuff(void) {
   
   printf("\r\n");
 }
+
+        
+        
+        
+        

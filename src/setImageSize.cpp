@@ -1,4 +1,5 @@
 #include "../settings.h"
+#include "../include/util.h"
 #include "../include/VC0706.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -81,8 +82,14 @@ int main(int argc, char *argv[]) {
 
   if ( !camera.setImageSize(size)) printf("Failed to set camera resolution.\r\n");
   else {
-	printf("Should be set now - use cameraInfo. Then use fetch and check image's resolution.\r\n");
-	printf("Propably fetched image has wrong resolution, reset camera and you should be all set..\r\n");
+    printf("\r\nResolution set. Camera needs a reset before settings apply. Doing a reset now.\r\n");
+    printf("You can check the resolution before reset, and it shows that settings have been\r\n");
+    printf("stored - but images downloaded from framebuffer will be using previous resolution, until\r\n");
+    printf("camera has been reset succesfully.\r\n\r\n");
+    if ( !camera.systemReset()) {
+      printf("Failed to reset camera.\r\n");
+    }
+    printf("Camera has been reset.\r\n");
   }
 
   camera.disconnect();
@@ -91,6 +98,8 @@ int main(int argc, char *argv[]) {
 
         
         
+        
+
         
 
         

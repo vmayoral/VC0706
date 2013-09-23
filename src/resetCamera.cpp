@@ -1,4 +1,5 @@
 #include "../settings.h"
+#include "../include/util.h"
 #include "../include/VC0706.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -50,16 +51,25 @@ int main() {
     camera.disconnect();
     return 0;
   }
+
+  /* Reset message should be:
+3 1.00
+Ctrl infr exist
+USER-defined sensor
+525
+Init end
+*/
   
-  printf("Camera has been reset now - flushing serial line..\r\n");
-  usleep(2000);
-  camera.flushData();
+  printf("Camera has been reset. Reset message follows: \r\n%s\r\n",
+	camera.responseData());
 	
   camera.disconnect();
   return 0;
 }
 
         
+        
+
         
 
         

@@ -1,4 +1,5 @@
 #include "../settings.h"
+#include "../include/util.h"
 #include "../include/VC0706.h"
 #include <stdio.h>
 #include <unistd.h>

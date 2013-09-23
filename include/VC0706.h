@@ -1,65 +1,30 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	VC0706 library v1.0 - 22.9.2013
+	VC0706 library v1.1 - 23.9.2013
 	Written by Oskari Rauta
 	License: expat ( check copying.txt )
 
-	I like C more than Python - and because I wasn't able
-	to fix existing python programs used to control VC0706
-	camera - I decided to write my own for C.
-
-	It's partially based on Adafruit's similar library for
-	Arduino - but it is a complete rewrite - also with this
-	library, you actually can use higher baudrates, like
-	115200. Although, on Adafruit forums staff suggested
-	people not to do so.. So that's up to you..
-
-	I've tried to add here all the available functions of
-	the camera, so user wouldn't need to fiddle with it
-	and risk the hardware - after all, writing not supported
-	data to the device might brick it.
-
-	I didn't add OSD features or ZOOMing/PANning/TILTing
-	features, as they don't do anything to my camera..
-	Camera answers to them, but they just don't do anything,
-	feel free to add if you want to..
-
-	Warning: I am not sure if Downsizing works, command for
-	downsizing was mentioned for both, setting and getting
-	twice in the datasheet - and both times they were
-	different.
+	Partially based on Adafruit's VC0706 library, but this is
+	a complete rewrite which also supports using higher baudrates
+	like 115200. Check usage for higher rates from samples in
+	src directory - function is initiateConnection();
 
 	CREDITS: I didn't write serial library - I used existing
 	one from wiringPI project. Thank you for great work.
 	
-	Compiles without modifications for atleast: mac os x &
-	linux.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-
-#ifndef uint8_t
-  #define uint8_t unsigned char
-#endif
-  
-#ifndef uint16_t
-  #define uint16_t unsigned short int
-#endif
-  
-#ifndef uint32_t
-  #define uint32_t unsigned int
-#endif
-  
-#ifndef boolean
-  #define boolean unsigned char
-#endif
   
 #ifndef VC0706_h_
 #define VC0706_h_ 1
+
+#include "util.h"
   
+// Don't use less than 100 as camerabuffsize and blocksize is always atleast 21 less than buffsize.  
+// And don't play with cameradelay too, it isn't there to slow down camera - it's there to tolerate camera slowliness.
 #define CAMERABUFFSIZE 220
 #define CAMERADELAY 10
 #define VC0706_BLOCKSIZE 192
-#define VC0706_SERIALNO 0
 
+// Size codes.. Use when setting/getting camera resolution
 #define SIZE_640x480 0x00
 #define SIZE_320x240 0x11
 #define SIZE_160x120 0x22
@@ -79,6 +44,7 @@ class VC0706 {
   	VC0706(void); // Constructor - if this is used, use setDevPath later
   	VC0706(const char *devPath); // Constructor with devPath
   	VC0706(char *devPath); // Constructor with devPath from variable
+  	~VC0706(); // Destructor
   	void setDevPath(char *newDevPath); // sets the device, only needed if you didn't construct with devpath
   	uint8_t connectionSerialNum(void); // Current connection's serial number ( always initially 0 )
   	void setConnectionSerialNum(uint8_t newSerialNum); // If you have exited your program after changing serial number, and did not recycle camera's power, or reset it - serial number is going to stick.. So use this after constructing.
@@ -121,7 +87,7 @@ class VC0706 {
   	boolean saveImage(char *filename); // Same --
   
   private:
-  	char devPath[300];
+  	char *devPath;
   	int sc;
   	uint8_t camerabuff[CAMERABUFFSIZE+1];
   	uint8_t bufferLen;
@@ -137,3 +103,8 @@ class VC0706 {
 };
   
 #endif
+
+        
+        
+        
+        
