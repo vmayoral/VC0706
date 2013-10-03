@@ -46,6 +46,7 @@ class VC0706 {
   	VC0706(char *devPath); // Constructor with devPath from variable
   	~VC0706(); // Destructor
   	void setDevPath(char *newDevPath); // sets the device, only needed if you didn't construct with devpath
+  	void setDevPath(const char *newDevPath); // Same as previous - just with const..
   	uint8_t connectionSerialNum(void); // Current connection's serial number ( always initially 0 )
   	void setConnectionSerialNum(uint8_t newSerialNum); // If you have exited your program after changing serial number, and did not recycle camera's power, or reset it - serial number is going to stick.. So use this after constructing.
   
@@ -107,4 +108,6 @@ class VC0706 {
         
         
         
+        
+
         

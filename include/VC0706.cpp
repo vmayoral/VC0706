@@ -40,7 +40,15 @@ void VC0706::setDevPath(char *newDevPath) {
   if ( this -> devPath != NULL )
     free( this -> devPath );
   this -> devPath = NULL;
-  this -> devPath = (char *)malloc(sizeof(char) * (strlen(devPath) + 1));
+  this -> devPath = (char *)malloc(sizeof(char) * (strlen(newDevPath) + 1));
+  strcpy(this -> devPath, newDevPath);
+}
+
+void VC0706::setDevPath(const char *newDevPath) {
+  if ( this -> devPath != NULL )
+    free( this -> devPath );
+  this -> devPath = NULL;
+  this -> devPath = (char *)malloc(sizeof(char) * (strlen(newDevPath) + 1));
   strcpy(this -> devPath, newDevPath);
 }
 
@@ -495,6 +503,8 @@ void VC0706::printBuff(void) {
   printf("\r\n");
 }
 
+        
+        
         
         
         
